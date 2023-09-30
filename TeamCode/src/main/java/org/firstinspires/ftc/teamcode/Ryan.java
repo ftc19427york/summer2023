@@ -40,6 +40,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.teamcode.ProgrammingBoard1;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -63,9 +64,15 @@ import java.lang.Thread;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Ryan", group="Iterative Opmode")
+@TeleOp(name="Ryan1", group="Iterative Opmode")
 
 public class Ryan extends OpMode {
+    ProgrammingBoard1 board;
+
+    {
+        board = new ProgrammingBoard1();
+    }
+
     // Declare OpMode members.
     private ElapsedTime period = new ElapsedTime();
     private ElapsedTime runtime = new ElapsedTime();
@@ -87,6 +94,7 @@ public class Ryan extends OpMode {
      */
     @Override
     public void init() {
+        board.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
 
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -94,8 +102,8 @@ public class Ryan extends OpMode {
         // step (using the FTC Robot Controller app on the phone).
         motor3 = hardwareMap.get(DcMotor.class, "motor3");
         motor2 = hardwareMap.get(DcMotor.class, "motor2");
-        motor1 = hardwareMap.get(DcMotor.class, "leftRear");
-        motor = hardwareMap.get(DcMotor.class, "rightRear");
+        motor1 = hardwareMap.get(DcMotor.class, "motor1");
+        motor = hardwareMap.get(DcMotor.class, "motor");
         //   intake_1 = hardwareMap.get(DcMotor.class, "intake_1");
         // intake_2 = hardwareMap.get(DcMotor.class, "intake_2");
         //  lift = hardwareMap.get(DcMotor.class, "spinner");
@@ -103,8 +111,8 @@ public class Ryan extends OpMode {
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        //motor.setDirection(DcMotor.Direction.REVERSE);
-        //motor3.setDirection(DcMotor.Direction.REVERSE);
+        motor.setDirection(DcMotor.Direction.REVERSE);
+        motor3.setDirection(DcMotor.Direction.REVERSE);
         //Arm.setDirection(DcMotor.Direction.FORWARD);
         //arm_1.setDirection(Servo.Direction.REVERSE);
         // lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -193,51 +201,48 @@ public class Ryan extends OpMode {
             intake_1.setPower(0);
             intake_2.setPower(0);
         }
-        if(spinner_f> 1.0){
-            lift.setPower(1.0);
-        }
-        if(spinner_r>1.0){
-            lift.setPower(-1.0);
-        }
-
-        if(arm == true){
-            lift.setTargetPosition(185);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(1.0);
-        } else {
-            lift.setTargetPosition(0);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(1.0);
-        }
 
 
-        telemetry.addData("Path1",  "Running at %d", lift.getCurrentPosition());
+    }
+
+    public <angleX, y, x> void drive(x angleX, y) {
+
+    }
+}
+
+
+    //    if (intake == true) {
+  //          intake_1.setPower(-1);
+  //          intake_2.setPower(-1);
+ //       } else if (outtake == true){
+ //           intake_1.setPower(1);
+ //           intake_2.setPower(1);
+ //       }else {
+ //           intake_1.setPower(0);
+  //          intake_2.setPower(0);
+//        }
+//        if(spinner_f> 1.0){
+ //           lift.setPower(1.0);
+ //       }
+  //      if(spinner_r>1.0){
+ //           lift.setPower(-1.0);
+ //       }
+
+ //       if(arm == true){
+ //           lift.setTargetPosition(185);
+  //          lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    //        lift.setPower(1.0);
+      //  } else {
+        //    lift.setTargetPosition(0);
+          //  lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //lift.setPower(1.0);
+     //   }
+
+
+    //    telemetry.addData("Path1",  "Running at %d", lift.getCurrentPosition());
         //telemetry.addData("Path1","Running at %7f,%7f,%7f,%7f,%7f",
         //                i, v1, v2, v3, v4);
-        telemetry.update();
+ //       telemetry.update();
 
-    }
-*/
-        /*
-         * Code to run ONCE after the driver hits STOP
-         */
-/*        public void stop () {
-        }
+*/ //   }
 
-        (double x, double y, double z){
-            double r = Math.hypot(x, y);
-            double robotAngle = Math.atan2(y, x) - Math.PI / 4;
-            double rightX = z;
-            final double v1 = r * Math.cos(robotAngle) + rightX;
-            final double v2 = r * Math.sin(robotAngle) - rightX;
-            final double v3 = r * Math.sin(robotAngle) + rightX;
-            final double v4 = r * Math.cos(robotAngle) - rightX;
-            motor3.setPower(-v1);
-            motor2.setPower(v2);
-            motor1.setPower(-v3);
-            motor.setPower(v4);
-        }
-
-
-    }
-  */

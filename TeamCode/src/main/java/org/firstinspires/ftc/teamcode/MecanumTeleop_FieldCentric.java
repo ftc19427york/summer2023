@@ -39,7 +39,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
 
-@TeleOp(name="Mecanum Field Centric: Teleop", group="Mecanum")
+@TeleOp()
 
 public class MecanumTeleop_FieldCentric extends LinearOpMode {
 
@@ -99,8 +99,8 @@ public class MecanumTeleop_FieldCentric extends LinearOpMode {
             // Output the safe vales to the motor drives.++
             robot.frontLeftDrive.setPower(v1);    //motor3
             robot.backRightDrive.setPower(v4);    //motor
-            robot.frontRightDrive.setPower(-v2);   //motor2
-            robot.backLeftDrive.setPower(-v3);     //motor1
+            robot.frontRightDrive.setPower(v2);   //motor2
+            robot.backLeftDrive.setPower(v3);     //motor1
 
             // Pace this loop so jaw action is reasonable speed.
             sleep(50);

@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 
+@Disabled
 
 @TeleOp(name="Mecanum: Teleop", group="Mecanum")
 

@@ -81,6 +81,7 @@ public class MecanumTeleop_FieldCentric extends LinearOpMode {
             /**gets the angle from the imu**/
             Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
             double angle = angles.firstAngle;
+
             /**gets squared values from the driver's stick input**/
             double r = Math.hypot(-gamepad1.left_stick_y, -gamepad1.left_stick_x);
             /**finds the desired angle that the driver wants to move the robot**/

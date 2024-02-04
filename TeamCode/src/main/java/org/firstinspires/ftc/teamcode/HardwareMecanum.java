@@ -29,11 +29,19 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorRangeSensor;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
  * This is NOT an opmode.
@@ -58,6 +66,15 @@ public class HardwareMecanum
     public DcMotor  frontRightDrive  = null;
     public DcMotor  backLeftDrive     = null;
     public DcMotor  backRightDrive     = null;
+    public Servo servo = null;
+  //  public DistanceSensor rangeFinder = null;
+  //  public TouchSensor toucher = null;
+ //   public RevColorSensorV3 frontColor = null;
+
+    public final static double ARM_HOME = 0.0; // Starting point for Servo Arm
+    public final static double ARM_MIN_RANGE = 0.0;  //Smallest number value allowed for servo position
+    public final static double ARM_MAX_RANGE = 1.0;  //Largest number allowed for servo position
+
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -85,17 +102,115 @@ public class HardwareMecanum
         backRightDrive.setDirection(DcMotor.Direction.REVERSE);// motor
 
         // Set all motors to zero power
-        frontLeftDrive.setPower(0);
-        frontRightDrive.setPower(0);
-        backLeftDrive.setPower(0);
-        backRightDrive.setPower(0);
+        this.stopDriving();
 
+
+
+        // Define and initialize ALL installed servos
+        servo=hwMap.servo.get("servo1"); // set equal to name of the servo motor in DS
+        servo.setPosition(ARM_HOME); //setPosition actually sets the servo's position and move it
+
+   //     rangeFinder = hwMap.get(DistanceSensor.class, "sensor_distance");
+    //    toucher = hwMap.get(TouchSensor.class, "touch");
+    //   frontColor = hwMap.get(RevColorSensorV3.class, "sensor_color");
+    }
+    public void driveWithoutEncode() {
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
     }
- }
+
+    public void driveWithEncode() {
+        frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void stopDriving() {
+        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+    }
+
+    public void driveStraight(double power, float seconds, Telemetry telemetry, LinearOpMode opMode){
+        frontRightDrive.setPower(power);
+        backRightDrive.setPower(power);
+        frontLeftDrive.setPower(power);
+        backLeftDrive.setPower(power);
+
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset(); //starts the time at 0
+        while (opMode.opModeIsActive() &&  (runtime.seconds() < seconds)) {
+           //print time to DS
+            telemetry.addData("Path", "driveStraight: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+    }
+    public void driveRight(double power, float seconds, Telemetry telemetry, LinearOpMode opMode){
+        frontLeftDrive.setPower(power);
+        frontRightDrive.setPower(-power);
+        backLeftDrive.setPower(-power);
+        backRightDrive.setPower(power);
+
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset(); //starts the time at 0
+        while (opMode.opModeIsActive() &&  (runtime.seconds() < seconds)) {
+            //print time to DS
+            telemetry.addData("Path", "driveStraight: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+    }
+
+    public void driveLeft(double power, float seconds, Telemetry telemetry, LinearOpMode opMode){
+        frontLeftDrive.setPower(-power);
+        frontRightDrive.setPower(power);
+        backLeftDrive.setPower(power);
+        backRightDrive.setPower(-power);
+
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset(); //starts the time at 0
+        while (opMode.opModeIsActive() &&  (runtime.seconds() < seconds)) {
+            //print time to DS
+            telemetry.addData("Path", "driveStraight: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+    }
+    public void driveSpinRight(double power, float seconds, Telemetry telemetry, LinearOpMode opMode){
+        frontLeftDrive.setPower(power);
+        frontRightDrive.setPower(-power);
+        backLeftDrive.setPower(power);
+        backRightDrive.setPower(-power);
+
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset(); //starts the time at 0
+        while (opMode.opModeIsActive() &&  (runtime.seconds() < seconds)) {
+            //print time to DS
+            telemetry.addData("Path", "driveStraight: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+    }
+
+    public void driveSpinLeft(double power, float seconds, Telemetry telemetry, LinearOpMode opMode){
+        frontLeftDrive.setPower(-power);
+        frontRightDrive.setPower(power);
+        backLeftDrive.setPower(-power);
+        backRightDrive.setPower(power);
+
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset(); //starts the time at 0
+        while (opMode.opModeIsActive() &&  (runtime.seconds() < seconds)) {
+            //print time to DS
+            telemetry.addData("Path", "driveStraight: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+    }
+}

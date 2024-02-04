@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 
-@Disabled
+//@Disabled
 
 @TeleOp(name="Mecanum: Teleop", group="Mecanum")
 
@@ -43,6 +43,8 @@ public class MecanumTeleop extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareMecanum robot = new HardwareMecanum();   // Use a Mecanum's hardware
+    double servoPosition = robot.ARM_HOME;  //Servo's position
+    final  double ARM_SPEED = 0.01;  //sets rate that servo moves in crements each time button is pressed
 
     @Override
     public void runOpMode() {
@@ -101,7 +103,19 @@ public class MecanumTeleop extends LinearOpMode {
                 robot.backLeftDrive.setPower(y2);     //motor1
 
 
+               // Use gamepad  Y & A raise lower arm
+                if (gamepad1.a) // if the "a" button is pressed on gamepad, do this next line of code
+                    servoPosition += ARM_SPEED;  // add to the servo position so it moves
+                else if (gamepad1.y)  // if the "y" button is pressed, then do the next line of code
+                    servoPosition -= ARM_SPEED;   // subtract from the servo position so it moves in the other direction
+
+                //Move both servos to new position
+                servoPosition = Range.clip(servoPosition, robot.ARM_MIN_RANGE, robot.ARM_MAX_RANGE); //make sure the position is valid
+                robot.servo.setPosition(servoPosition);  // this code here actually sets the position of the servo so it moves
+
+
                 // Send telemetry message to signify robot running;
+                telemetry.addData("arm", "%.2f", servoPosition);  //very important code. shows the values on the screen
                 telemetry.addData("x1", "%.2f", x1);
                 telemetry.addData("y1", "%.2f", y1);
                 telemetry.update();

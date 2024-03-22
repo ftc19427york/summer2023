@@ -1,12 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.broadcom.BroadcomColorSensor;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+/*
 @Autonomous
 public class testColor extends LinearOpMode {
     // Define a variable for our color sensor
@@ -40,3 +34,4 @@ public class testColor extends LinearOpMode {
 
         }
     }
+*/

@@ -43,8 +43,8 @@ public class MecanumTeleop extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareMecanum robot = new HardwareMecanum();   // Use a Mecanum's hardware
-    double servoPosition = robot.ARM_HOME;  //Servo's position
-    final  double ARM_SPEED = 0.01;  //sets rate that servo moves in crements each time button is pressed
+    double servoPosition = robot.droneARM_HOME;  //Servo's position
+    final  double ARM_SPEED = 0.01;  //sets rate that servo moves increments each time button is pressed
 
     @Override
     public void runOpMode() {
@@ -110,8 +110,8 @@ public class MecanumTeleop extends LinearOpMode {
                     servoPosition -= ARM_SPEED;   // subtract from the servo position so it moves in the other direction
 
                 //Move both servos to new position
-                servoPosition = Range.clip(servoPosition, robot.ARM_MIN_RANGE, robot.ARM_MAX_RANGE); //make sure the position is valid
-                robot.servo.setPosition(servoPosition);  // this code here actually sets the position of the servo so it moves
+                servoPosition = Range.clip(servoPosition, robot.droneARM_MIN_RANGE, robot.droneARM_MAX_RANGE); //make sure the position is valid
+       //         robot.servo.setPosition(servoPosition);  // this code here actually sets the position of the servo so it moves
 
 
                 // Send telemetry message to signify robot running;

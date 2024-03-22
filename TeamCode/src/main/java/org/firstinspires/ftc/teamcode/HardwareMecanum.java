@@ -29,16 +29,10 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorRangeSensor;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -66,14 +60,23 @@ public class HardwareMecanum
     public DcMotor  frontRightDrive  = null;
     public DcMotor  backLeftDrive     = null;
     public DcMotor  backRightDrive     = null;
-    public Servo servo = null;
-  //  public DistanceSensor rangeFinder = null;
+    public DcMotor  lift     = null;
+    public DcMotor  tilt     = null;
+    public Servo drone = null;
+    public Servo claw = null;
+    public Servo twistClaw = null;
+
+    //  public DistanceSensor rangeFinder = null;
   //  public TouchSensor toucher = null;
  //   public RevColorSensorV3 frontColor = null;
 
-    public final static double ARM_HOME = 0.0; // Starting point for Servo Arm
-    public final static double ARM_MIN_RANGE = 0.0;  //Smallest number value allowed for servo position
-    public final static double ARM_MAX_RANGE = 1.0;  //Largest number allowed for servo position
+    public final static double droneARM_HOME = 0.5; // Starting point for Servo Arm
+    public final static double clawARM_HOME = 0.10; // Starting point for Servo Arm
+
+    public final static double twistClawARM_HOME = 0.0; // Starting point for Servo Arm
+
+    public final static double droneARM_MIN_RANGE = 0.0;  //Smallest number value allowed for servo position
+    public final static double droneARM_MAX_RANGE = 1.0;  //Largest number allowed for servo position
 
 
     /* local OpMode members. */
@@ -96,10 +99,20 @@ public class HardwareMecanum
         backLeftDrive    = hwMap.get(DcMotor.class, "motor1");
         backRightDrive    = hwMap.get(DcMotor.class, "motor");
 
-        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD); // motor3
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);// motor2
-        backLeftDrive.setDirection(DcMotor.Direction.FORWARD); // motor1
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);// motor
+        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE); // motor3
+        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);// motor2
+        backLeftDrive.setDirection(DcMotor.Direction.REVERSE); // motor1
+        backRightDrive.setDirection(DcMotor.Direction.FORWARD);// motor
+
+        lift    = hwMap.get(DcMotor.class, "motor4");
+        tilt    = hwMap.get(DcMotor.class, "motor5");
+
+        lift.setDirection(DcMotor.Direction.REVERSE); // motor4
+        tilt.setDirection(DcMotor.Direction.FORWARD);// motor5
+        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         // Set all motors to zero power
         this.stopDriving();
@@ -107,8 +120,13 @@ public class HardwareMecanum
 
 
         // Define and initialize ALL installed servos
-        servo=hwMap.servo.get("servo1"); // set equal to name of the servo motor in DS
-        servo.setPosition(ARM_HOME); //setPosition actually sets the servo's position and move it
+        drone=hwMap.servo.get("servo2"); // set equal to name of the servo motor in DS
+        drone.setPosition(droneARM_HOME); //setPosition actually sets the servo's position and move it
+        claw=hwMap.servo.get("servo1"); // set equal to name of the servo motor in DS
+        claw.setPosition(clawARM_HOME); //setPosition actually sets the servo's position and move it
+        twistClaw=hwMap.servo.get("servo"); // set equal to name of the servo motor in DS
+        twistClaw.setPosition(twistClawARM_HOME); //setPosition actually sets the servo's position and move it
+
 
    //     rangeFinder = hwMap.get(DistanceSensor.class, "sensor_distance");
     //    toucher = hwMap.get(TouchSensor.class, "touch");
@@ -141,7 +159,7 @@ public class HardwareMecanum
         backRightDrive.setPower(0);
     }
 
-    public void driveStraight(double power, float seconds, Telemetry telemetry, LinearOpMode opMode){
+    public void driveStraight(double power, float seconds, Telemetry telemetry){
         frontRightDrive.setPower(power);
         backRightDrive.setPower(power);
         frontLeftDrive.setPower(power);
@@ -149,7 +167,7 @@ public class HardwareMecanum
 
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset(); //starts the time at 0
-        while (opMode.opModeIsActive() &&  (runtime.seconds() < seconds)) {
+        while (runtime.seconds() < seconds) {
            //print time to DS
             telemetry.addData("Path", "driveStraight: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();

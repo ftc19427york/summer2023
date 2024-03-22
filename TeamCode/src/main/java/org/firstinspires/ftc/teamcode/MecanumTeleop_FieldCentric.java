@@ -30,13 +30,15 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
 
 @TeleOp()
@@ -45,7 +47,21 @@ public class MecanumTeleop_FieldCentric extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareMecanum robot = new HardwareMecanum();   // Use a Mecanum's hardware
+    double dronePosition = robot.droneARM_HOME;  // servo's position
+    final double droneARM_SPEED = 0.10;  // set rate to move servo
+    double twistPosition = robot.twistClawARM_HOME;  // servo's position
+    final double twistARM_SPEED = 0.005;  // set rate to move servo
+
+    double clawPosition = robot.clawARM_HOME;  // servo's position
+    final double clawARM_SPEED = 0.005;  // set rate to move servo
+
+    static final double COUNTS_PER_MOTOR_REV = 537.7;   // eg: GoBILDA 312 RPM Yellow Jacket
+    static final double DRIVE_GEAR_REDUCTION = 1.0;     // No External Gearing.
+    static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
     public BNO055IMU imu;
+
     @Override
     public void runOpMode() {
 
@@ -53,16 +69,17 @@ public class MecanumTeleop_FieldCentric extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
+        // int newTarget=robot.lift.getTargetPosition() + (int) COUNTS_PER_MOTOR_REV*2;
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         // Defines the parameters for the gyro (units)
         BNO055IMU.Parameters imuParameters = new BNO055IMU.Parameters();
-        imuParameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        imuParameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        imuParameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        imuParameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         imuParameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        imuParameters.loggingEnabled      = true;
-        imuParameters.loggingTag          = "IMU";
+        imuParameters.loggingEnabled = true;
+        imuParameters.loggingTag = "IMU";
         imuParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         // Intializes the parameters previously defined
@@ -74,7 +91,7 @@ public class MecanumTeleop_FieldCentric extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
+        robot.twistClaw.setPosition(0.30);
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
@@ -103,8 +120,95 @@ public class MecanumTeleop_FieldCentric extends LinearOpMode {
             robot.frontRightDrive.setPower(v2);   //motor2
             robot.backLeftDrive.setPower(v3);     //motor1
 
+
+            if (gamepad1.right_trigger > 0.5) { // if the "b" is pressed on gamepad do this next line of code
+                robot.drone.setPosition(0);  //this code here actually sets the position of the servo so it moves
+                sleep(500);
+                robot.drone.setPosition(.5);  //this code here actually sets the position of the servo so it moves
+            }
+
+            if (gamepad2.dpad_up == true) {
+                twistPosition += twistARM_SPEED; // a position os it movesdd to the servo
+                robot.twistClaw.setPosition(twistPosition);  //this code here actually sets the position of the servo so it moves
+            }
+
+
+            if (gamepad2.dpad_down==true) { //if the "y" button is pressed then do the next line of code
+                twistPosition -= twistARM_SPEED;   //substract from the servo position so it moves in the other direction
+                robot.twistClaw.setPosition(twistPosition);  //this code here actually sets the position of the servo so it moves
+            }
+            //    dronePosition = Range.clip(dronePosition, robot.ARM_MIN_RANGE, robot.ARM_MAX_RANGE); // make sure the position is valid
+
+            if (gamepad2.y == true) { // if the "a" is pressed on gamepad do this next line of code
+                robot.lift.setPower(1);  //this code here actually sets the position of the servo so it moves
+                robot.lift.setTargetPosition(1000);
+                robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+
+            if (gamepad2.right_bumper == true) { // if the "a" is pressed on gamepad do this next line of code
+                robot.lift.setPower(1);  //this code here actually sets the position of the servo so it moves
+                robot.lift.setTargetPosition(1800);
+                robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+
+            if (gamepad2.a == true) {
+                robot.lift.setPower(.75);  //this code here actually sets the position of the servo so it moves
+                robot.lift.setTargetPosition(30);
+                robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+
+
+ /*           if(gamepad1.right_trigger > 0.5) {
+                robot.lift.setPower(1.0);
+            } else if (gamepad1.left_trigger > 0.5) {
+                robot.lift.setPower(-1.0);
+            } else {
+                robot.lift.setPower(0);
+
+            }
+                //       }
+
+*/
+
+
+
+            if (gamepad2.x == true && gamepad2.b == false) { // if the "a" is pressed on gamepad do this next line of code
+                robot.tilt.setPower(-1);
+            } //this code here actually sets the position of the servo so it moves
+            if (gamepad2.x == false && gamepad2.b == false) { // if the "a" is pressed on gamepad do this next line of code
+                robot.tilt.setPower(0);
+                //  robot.tilt.setTargetPosition(9000);
+                //  robot.tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            if (gamepad2.b == true && gamepad2.x == false) {
+                robot.tilt.setPower(1);  //this code here actually sets the position of the servo so it moves
+            }
+            if (gamepad2.x == false && gamepad2.b == false) { // if the "a" is pressed on gamepad do this next line of code
+                robot.tilt.setPower(0);
+                //  robot.tilt.setTargetPosition(0);
+                //  robot.tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            if (gamepad2.right_trigger > 0.5) { // if the "b" is pressed on gamepad do this next line of code
+                //robot.twistClaw.setPosition(0);  //this code here actually sets the position of the servo so it moves
+                // sleep(500);
+                robot.claw.setPosition(.10);  //this code here actually sets the position of the servo so it moves
+                clawPosition += clawARM_SPEED; // a position os it movesdd to the servo
+
+            }
+            if (gamepad2.left_trigger > 0.5) { // if the "b" is pressed on gamepad do this next line of code
+                robot.claw.setPosition(0);  //this code here actually sets the position of the servo so it moves
+                clawPosition -= clawARM_SPEED; // a position os it movesdd to the servo
+            }
+
+            telemetry.addData("drone", "%.2f", dronePosition);
+            telemetry.addData("twist", "%.2f", twistPosition);
+            telemetry.addData("claw", "%.2f", clawPosition);
+
+
+            telemetry.update();
+
             // Pace this loop so jaw action is reasonable speed.
-            sleep(50);
+            //  sleep(50);
         }
     }
 }

@@ -45,7 +45,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class MecanumTeleop_FieldCentric extends LinearOpMode {
 
-    /* Declare OpMode members. */
+
     HardwareMecanum robot = new HardwareMecanum();   // Use a Mecanum's hardware
     double dronePosition = robot.droneARM_HOME;  // servo's position
     final double droneARM_SPEED = 0.10;  // set rate to move servo

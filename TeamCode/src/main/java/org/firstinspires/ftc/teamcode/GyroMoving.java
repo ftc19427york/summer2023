@@ -107,10 +107,9 @@ public class GyroMoving extends LinearOpMode {
     private double  turnSpeed     = 0;
     private double  leftSpeed     = 0;
     private double  rightSpeed    = 0;
-    private int     leftTargetLF    = 0;
-    private int     rightTargetRF   = 0;
-    private int     leftTargetLB    = 0;
-    private int     rightTargetRB   = 0;
+    private int     leftTarget    = 0;
+    private int     rightTarget   = 0;
+
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
@@ -196,8 +195,8 @@ public class GyroMoving extends LinearOpMode {
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
 
-        driveStraight(DRIVE_SPEED, 60.0, 0.0);    // Drive Forward 24"
-  /*      turnToHeading( TURN_SPEED, -45.0);               // Turn  CW to -45 Degrees
+  /*      driveStraight(DRIVE_SPEED, 24.0, 0.0);    // Drive Forward 24"
+        turnToHeading( TURN_SPEED, -45.0);               // Turn  CW to -45 Degrees
         holdHeading( TURN_SPEED, -45.0, 0.5);   // Hold -45 Deg heading for a 1/2 second
 
         driveStraight(DRIVE_SPEED, 17.0, -45.0);  // Drive Forward 17" at -45 degrees (12"x and 12"y)
@@ -208,8 +207,15 @@ public class GyroMoving extends LinearOpMode {
         turnToHeading( TURN_SPEED,   0.0);               // Turn  CW  to 0 Degrees
         holdHeading( TURN_SPEED,   0.0, 1.0);    // Hold  0 Deg heading for 1 second
 
-        driveStraight(DRIVE_SPEED,-75, 0.0);    // Drive in Reverse 48" (should return to approx. staring position)
-        robot.tilt.setTargetPosition(6980);
+        driveStraight(DRIVE_SPEED,-48, 0.0);    // Drive in Reverse 48" (should return to approx. staring position)
+      */
+        driveLeft(DRIVE_SPEED,  20,  0.0);
+        turnToHeading( TURN_SPEED,   90.0);               // Turn  CW  to 0 Degrees
+        holdHeading( TURN_SPEED,   90.0, 1.0);    // Hold  0 Deg heading for 1 second
+        driveRight(DRIVE_SPEED,  20);
+
+
+     /*   robot.tilt.setTargetPosition(6980);
         robot.tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.tilt.setPower(.8);
         while( robot.tilt.isBusy()) {
@@ -226,11 +232,11 @@ public class GyroMoving extends LinearOpMode {
         robot.tilt.setPower(.8);
         while( robot.tilt.isBusy()) {
 
-        }
+        }  */
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // Pause to display last telemetry message.
- */   }
+    }
 
     /*
      * ====================================================================================================
@@ -262,16 +268,16 @@ public class GyroMoving extends LinearOpMode {
 
             // Determine new target position, and pass to motor controller
             int moveCounts = (int)(distance * COUNTS_PER_INCH);
-            leftTargetLF = robot.frontLeftDrive.getCurrentPosition() + moveCounts;
-            rightTargetRF = robot.frontRightDrive.getCurrentPosition() + moveCounts;
-            leftTargetLB = robot.backLeftDrive.getCurrentPosition() + moveCounts;
-            rightTargetRB = robot.backRightDrive.getCurrentPosition() + moveCounts;
+            leftTarget = robot.frontLeftDrive.getCurrentPosition() + moveCounts;
+            rightTarget = robot.frontRightDrive.getCurrentPosition() + moveCounts;
+            leftTarget = robot.backLeftDrive.getCurrentPosition() + moveCounts;
+            rightTarget = robot.backRightDrive.getCurrentPosition() + moveCounts;
 
             // Set Target FIRST, then turn on RUN_TO_POSITION
-            robot.frontLeftDrive.setTargetPosition(leftTargetLF);
-            robot.frontRightDrive.setTargetPosition(rightTargetRF);
-            robot.backLeftDrive.setTargetPosition(leftTargetLB);
-            robot.backRightDrive.setTargetPosition(rightTargetRB);
+            robot.frontLeftDrive.setTargetPosition(leftTarget);
+            robot.frontRightDrive.setTargetPosition(rightTarget);
+            robot.backLeftDrive.setTargetPosition(leftTarget);
+            robot.backRightDrive.setTargetPosition(rightTarget);
 
             robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -309,6 +315,125 @@ public class GyroMoving extends LinearOpMode {
             robot.backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
+
+
+    public void driveLeft(double maxDriveSpeed,
+                              double distance,
+                              double heading) {
+
+        // Ensure that the OpMode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            int moveCounts = (int)(distance * COUNTS_PER_INCH*1.2);
+            leftTarget = robot.frontLeftDrive.getCurrentPosition() + moveCounts;
+            rightTarget = robot.frontRightDrive.getCurrentPosition() + moveCounts;
+            leftTarget = robot.backLeftDrive.getCurrentPosition() + moveCounts;
+            rightTarget = robot.backRightDrive.getCurrentPosition() + moveCounts;
+
+            // Set Target FIRST, then turn on RUN_TO_POSITION
+            robot.frontLeftDrive.setTargetPosition(-leftTarget);
+            robot.frontRightDrive.setTargetPosition(rightTarget);
+            robot.backLeftDrive.setTargetPosition(leftTarget);
+            robot.backRightDrive.setTargetPosition(-rightTarget);
+
+            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.backLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.backRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // Set the required driving speed  (must be positive for RUN_TO_POSITION)
+            // Start driving straight, and then enter the control loop
+            maxDriveSpeed = Math.abs(maxDriveSpeed);
+            moveRobot(maxDriveSpeed, 0);
+
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() &&
+                    (robot.frontLeftDrive.isBusy() && robot.frontRightDrive.isBusy())) {
+
+                // Determine required steering to keep on heading
+                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
+
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (distance < 0)
+                    turnSpeed *= -1.0;
+
+                // Apply the turning correction to the current driving speed.
+                moveRobot(driveSpeed, turnSpeed);
+
+                // Display drive status for the driver.
+                sendTelemetry(true);
+            }
+
+            // Stop all motion & Turn off RUN_TO_POSITION
+            moveRobot(0, 0);
+            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+
+    public void driveRight(double maxDriveSpeed,
+                          double distance) {
+
+        // Ensure that the OpMode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            int moveCounts = (int)(distance * COUNTS_PER_INCH*1.2);
+            leftTarget = robot.frontLeftDrive.getCurrentPosition() + moveCounts;
+            rightTarget = robot.frontRightDrive.getCurrentPosition() + moveCounts;
+            leftTarget = robot.backLeftDrive.getCurrentPosition() + moveCounts;
+            rightTarget = robot.backRightDrive.getCurrentPosition() + moveCounts;
+
+            // Set Target FIRST, then turn on RUN_TO_POSITION
+            robot.frontLeftDrive.setTargetPosition(leftTarget);
+            robot.frontRightDrive.setTargetPosition(-rightTarget);
+            robot.backLeftDrive.setTargetPosition(-leftTarget);
+            robot.backRightDrive.setTargetPosition(rightTarget);
+
+            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.backLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.backRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // Set the required driving speed  (must be positive for RUN_TO_POSITION)
+            // Start driving straight, and then enter the control loop
+            maxDriveSpeed = Math.abs(maxDriveSpeed);
+            moveRobot(maxDriveSpeed, 0);
+
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() &&
+                    (robot.frontLeftDrive.isBusy() && robot.frontRightDrive.isBusy())) {
+/*
+                // Determine required steering to keep on heading
+                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
+
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (distance < 0)
+                    turnSpeed *= -1.0;
+
+                // Apply the turning correction to the current driving speed.
+                moveRobot(driveSpeed, turnSpeed);
+
+                // Display drive status for the driver.
+                sendTelemetry(true); */
+            }
+
+            // Stop all motion & Turn off RUN_TO_POSITION
+          //  moveRobot(0, 0);
+            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+
+
+
 
     /**
      *  Spin on the central axis to point in a new direction.
@@ -432,6 +557,8 @@ public class GyroMoving extends LinearOpMode {
 
         robot.frontLeftDrive.setPower(leftSpeed);
         robot.frontRightDrive.setPower(rightSpeed);
+        robot.backLeftDrive.setPower(leftSpeed);
+        robot.backRightDrive.setPower(rightSpeed);
     }
 
     /**

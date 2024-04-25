@@ -156,10 +156,10 @@ public class Blue_2024 extends LinearOpMode {
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
         // Step 1:  Drive forward for 3 seconds
-        robot.frontRightDrive.setPower(-.25);
-        robot.backRightDrive.setPower(.25);
-        robot.frontLeftDrive.setPower(.23);
-        robot.backLeftDrive.setPower(-.23);
+        robot.frontRightDrive.setPower(-.50);
+        robot.backRightDrive.setPower(.50);
+        robot.frontLeftDrive.setPower(.50);
+        robot.backLeftDrive.setPower(-.50);
 
         robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.backLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);

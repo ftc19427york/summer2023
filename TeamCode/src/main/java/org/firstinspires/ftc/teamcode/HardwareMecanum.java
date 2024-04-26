@@ -56,6 +56,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class HardwareMecanum
 {
     /* Public OpMode members. */
+    public wheels drivetrain;
     public DcMotor  frontLeftDrive   = null;
     public DcMotor  frontRightDrive  = null;
     public DcMotor  backLeftDrive     = null;
@@ -98,6 +99,9 @@ public class HardwareMecanum
         frontRightDrive = hwMap.get(DcMotor.class, "motor2");
         backLeftDrive    = hwMap.get(DcMotor.class, "motor1");
         backRightDrive    = hwMap.get(DcMotor.class, "motor");
+
+        drivetrain = new wheels(frontLeftDrive, frontRightDrive);
+        drivetrain.hello();
 
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE); // motor3
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);// motor2

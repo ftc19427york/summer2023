@@ -126,14 +126,14 @@ public class GyroMoving extends LinearOpMode {
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
     static final double     DRIVE_SPEED             = 0.4;     // Max driving speed for better distance accuracy.
-    static final double     TURN_SPEED              = 0.2;     // Max Turn speed to limit turn rate
+    static final double     TURN_SPEED              = 0.4;     // Max Turn speed to limit turn rate
     static final double     HEADING_THRESHOLD       = 1.0 ; //   // How close must the heading get to the target before moving to next step.
     // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
     // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
     // Increase these numbers if the heading does not corrects strongly enough (eg: a heavy robot or using tracks)
     // Decrease these numbers if the heading does not settle on the correct value (eg: very agile robot with omni wheels)
-    static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
+    static final double     P_TURN_GAIN            = 0.1;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable
 
 
@@ -217,8 +217,8 @@ public class GyroMoving extends LinearOpMode {
      //   turnToHeading( TURN_SPEED,   90.0);               // Turn  CW  to 0 Degrees
     //    holdHeading( TURN_SPEED,   90.0, 1.5);    // Hold  0 Deg heading for 1 second
      //   driveRight(DRIVE_SPEED,  36, 90); */
-       driveStraight(DRIVE_SPEED,2 ,0);
-      //  driveLeft(DRIVE_SPEED, 21.5,0);
+       driveStraight(DRIVE_SPEED,20 ,0);
+       driveLeft(DRIVE_SPEED, 21.5,0);
       //  turnToHeading( TURN_SPEED,   -90.0);
 
 
@@ -228,9 +228,9 @@ public class GyroMoving extends LinearOpMode {
 
 
 
-      //  turnToHeading( TURN_SPEED,   -90.0);               // Turn  CW  to 0 Degrees
-      //  holdHeading( TURN_SPEED,   -90.0, 1.5);
-      //  driveStraight(DRIVE_SPEED,84,-90);
+        turnToHeading( TURN_SPEED,   90.0);               // Turn  CW  to 0 Degrees
+        holdHeading( TURN_SPEED,   90.0, 1.5);
+        driveStraight(DRIVE_SPEED,20,90);
 
 
 
@@ -396,10 +396,10 @@ public class GyroMoving extends LinearOpMode {
             // Stop all motion & Turn off RUN_TO_POSITION
             moveRobot(0, 0);
             robot.stopResetEncode();
-/*            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       /*     robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); */
+            robot.backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);  */
         }
     }
 
@@ -459,10 +459,10 @@ public class GyroMoving extends LinearOpMode {
 
            //Stop all motion & Turn off RUN_TO_POSITION
             moveRobot(0, 0);
-        /*    robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+     /*       robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); */
+            robot.backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);  */
         }
     }
 
@@ -527,6 +527,7 @@ public class GyroMoving extends LinearOpMode {
 
         // Run getSteeringCorrection() once to pre-calculate the current error
         getSteeringCorrection(heading, P_DRIVE_GAIN);
+        robot.driveWithoutEncode();
 
         // keep looping while we are still active, and not on heading.
         while (opModeIsActive() && (Math.abs(headingError) > HEADING_THRESHOLD)) {
@@ -536,6 +537,7 @@ public class GyroMoving extends LinearOpMode {
 
             // Clip the speed to the maximum permitted value.
             turnSpeed = Range.clip(turnSpeed, -maxTurnSpeed, maxTurnSpeed);
+            telemetry.addData("turn speed", turnSpeed);
 
             // Pivot in place by applying the turning correction
             moveRobot(0, turnSpeed);
@@ -543,6 +545,8 @@ public class GyroMoving extends LinearOpMode {
             // Display drive status for the driver.
             sendTelemetry(false);
         }
+
+        robot.driveWithEncode();
 
         // Stop all motion;
         moveRobot(0, 0);
@@ -602,7 +606,7 @@ public class GyroMoving extends LinearOpMode {
 
         // Normalize the error to be within +/- 180 degrees
         while (headingError > 180)  headingError -= 360;
-        while (headingError <= 180) headingError += 360;
+        while (headingError <= -180) headingError += 360;
 
         // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
         return Range.clip(headingError * proportionalGain, -1, 1);

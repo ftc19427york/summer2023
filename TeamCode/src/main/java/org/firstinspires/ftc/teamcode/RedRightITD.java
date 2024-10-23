@@ -89,9 +89,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Gyro Moving", group="Robot")
+@Autonomous(name="Red Right ITD Auto", group="Robot")
 //@Disabled
-public class GyroMoving extends LinearOpMode {
+public class RedRightITD extends LinearOpMode {
     HardwareMecanum robot = new HardwareMecanum();
     /* Declare OpMode members. */
     //  private DcMotor         leftDrive   = null;
@@ -190,29 +190,8 @@ public class GyroMoving extends LinearOpMode {
 
         // $$ START AUTONOMOUS MODE
 
-
-        driveStraight(DRIVE_SPEED, 15, 0);
-        driveLeft(DRIVE_SPEED,15, 0 );
-        driveStraight(DRIVE_SPEED, 8, 0);
-        // INSERT CLAW MOVE FOR FIRST SAMPLE
         driveStraight(DRIVE_SPEED, -8, 0 );
         turnToHeading(135.0);
-        driveStraight(DRIVE_SPEED,4, 135.0 );
-        // INSERT CLAW MOVE FOR FIRST SAMPLE DEPOSIT
-        turnToHeading(360.0);
-        driveStraight(DRIVE_SPEED, 10, 0 );
-        driveLeft( DRIVE_SPEED, 8, 0 );
-        // INSERT CLAW MOVE FOR SECOND SAMPLE
-        turnToHeading(165.0);
-        driveStraight(DRIVE_SPEED, 7, 0 );
-        // INSERT CLAW MOVE FOR SECOND SAMPLE DEPOSIT
-        turnToHeading(27.0);
-        // INSERT CLAW MOVE FOR THIRD SAMPLE
-        turnToHeading(155.0);
-        // INSERT CLAW MOVE FOR THIRD SAMPLE DEPOSIT
-        turnToHeading(330.0);
-        driveStraight(DRIVE_SPEED, 45, 330.0);
-
 
         // $$ END AUTONOMOUS MODE
 

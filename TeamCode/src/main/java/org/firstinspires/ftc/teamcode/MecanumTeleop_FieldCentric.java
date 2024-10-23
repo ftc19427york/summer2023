@@ -92,6 +92,7 @@ public class MecanumTeleop_FieldCentric extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         robot.twistClaw.setPosition(0.30);
+        robot.tilt.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 

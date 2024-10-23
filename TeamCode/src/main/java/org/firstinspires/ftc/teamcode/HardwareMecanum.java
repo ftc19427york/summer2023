@@ -72,7 +72,7 @@ public class HardwareMecanum
  //   public RevColorSensorV3 frontColor = null;
 
     public final static double droneARM_HOME = 0.5; // Starting point for Servo Arm
-    public final static double clawARM_HOME = 0.10; // Starting point for Servo Arm
+    public final static double clawARM_HOME = 0.0; // Starting point for Servo Arm
 
     public final static double twistClawARM_HOME = 0.0; // Starting point for Servo Arm
 
@@ -116,6 +116,9 @@ public class HardwareMecanum
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        tilt.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         // Set all motors to zero power
@@ -247,4 +250,5 @@ public class HardwareMecanum
             telemetry.update();
         }
     }
+
 }

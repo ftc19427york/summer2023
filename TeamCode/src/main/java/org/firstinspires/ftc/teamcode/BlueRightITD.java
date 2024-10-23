@@ -89,9 +89,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Gyro Moving", group="Robot")
+@Autonomous(name="Blue Right ITD Auto", group="Robot")
 //@Disabled
-public class GyroMoving extends LinearOpMode {
+public class BlueRightITD extends LinearOpMode {
     HardwareMecanum robot = new HardwareMecanum();
     /* Declare OpMode members. */
     //  private DcMotor         leftDrive   = null;
@@ -190,30 +190,40 @@ public class GyroMoving extends LinearOpMode {
 
         // $$ START AUTONOMOUS MODE
 
+        driveStraight(DRIVE_SPEED,23,0);
+        turnToHeading(-36);
+        //INSERT CLAW TO GRAB FIRST SAMPLE
+        turnToHeading(0);
+        driveStraight(DRIVE_SPEED,-24.5,0);
+        driveLeft(DRIVE_SPEED,60,0);
+        turnToHeading(90);
+        driveStraight(DRIVE_SPEED,25,90);
+        //INSERT FIRST SAMPLE IN THE BASKET
+        turnToHeading(0);
+        driveRight(DRIVE_SPEED,105,0);
+        driveStraight(DRIVE_SPEED,20,0);
+        driveStraight(DRIVE_SPEED,-20,0);
+        //INSERT CLAW TO GRAB SECOND SAMPLE
+        driveLeft(DRIVE_SPEED,70,0);
+        turnToHeading(90);
+        driveStraight(DRIVE_SPEED,25,90);
+        //INSERT SECOND SAMPLE IN THE BASKET
+        turnToHeading(0);
+        driveRight(DRIVE_SPEED,100,0);
+        driveStraight(DRIVE_SPEED,20,0);
+        //INSERT CLAW TO GRAB THIRD SAMPLE
+        turnToHeading(90);
+        driveStraight(DRIVE_SPEED,80,90);
+        // INSERT THIRD SAMPLE IN THE BASKET
+      //  turnToHeading(180);
+     //   driveStraight(DRIVE_SPEED,60,180);
+        turnToHeading(0);
+        driveRight(DRIVE_SPEED,61,0);
+        driveStraight(DRIVE_SPEED,28,0);
+        driveLeft(DRIVE_SPEED,15,0);
 
-        driveStraight(DRIVE_SPEED, 15, 0);
-        driveLeft(DRIVE_SPEED,15, 0 );
-        driveStraight(DRIVE_SPEED, 8, 0);
-        // INSERT CLAW MOVE FOR FIRST SAMPLE
-        driveStraight(DRIVE_SPEED, -8, 0 );
-        turnToHeading(135.0);
-        driveStraight(DRIVE_SPEED,4, 135.0 );
-        // INSERT CLAW MOVE FOR FIRST SAMPLE DEPOSIT
-        turnToHeading(360.0);
-        driveStraight(DRIVE_SPEED, 10, 0 );
-        driveLeft( DRIVE_SPEED, 8, 0 );
-        // INSERT CLAW MOVE FOR SECOND SAMPLE
-        turnToHeading(165.0);
-        driveStraight(DRIVE_SPEED, 7, 0 );
-        // INSERT CLAW MOVE FOR SECOND SAMPLE DEPOSIT
-        turnToHeading(27.0);
-        // INSERT CLAW MOVE FOR THIRD SAMPLE
-        turnToHeading(155.0);
-        // INSERT CLAW MOVE FOR THIRD SAMPLE DEPOSIT
-        turnToHeading(330.0);
-        driveStraight(DRIVE_SPEED, 45, 330.0);
 
-
+        //INSERT CLAW TO GRAB THIRD SAMPLE
         // $$ END AUTONOMOUS MODE
 
 

@@ -89,9 +89,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Gyro Moving", group="Robot")
+@Autonomous(name="Gyro Moving Old", group="Robot")
 //@Disabled
-public class GyroMoving extends LinearOpMode {
+public class Old extends LinearOpMode {
     HardwareMecanum robot = new HardwareMecanum();
     /* Declare OpMode members. */
     //  private DcMotor         leftDrive   = null;
@@ -187,36 +187,38 @@ public class GyroMoving extends LinearOpMode {
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
         // ******  Example code  ******
-
-        // $$ START AUTONOMOUS MODE
-
-
-        driveStraight(DRIVE_SPEED, 15, 0);
-        driveLeft(DRIVE_SPEED,15, 0 );
-        driveStraight(DRIVE_SPEED, 8, 0);
-        // INSERT CLAW MOVE FOR FIRST SAMPLE
-        driveStraight(DRIVE_SPEED, -8, 0 );
-        turnToHeading(135.0);
-        driveStraight(DRIVE_SPEED,4, 135.0 );
-        // INSERT CLAW MOVE FOR FIRST SAMPLE DEPOSIT
-        turnToHeading(360.0);
-        driveStraight(DRIVE_SPEED, 10, 0 );
-        driveLeft( DRIVE_SPEED, 8, 0 );
-        // INSERT CLAW MOVE FOR SECOND SAMPLE
-        turnToHeading(165.0);
-        driveStraight(DRIVE_SPEED, 7, 0 );
-        // INSERT CLAW MOVE FOR SECOND SAMPLE DEPOSIT
-        turnToHeading(27.0);
-        // INSERT CLAW MOVE FOR THIRD SAMPLE
-        turnToHeading(155.0);
-        // INSERT CLAW MOVE FOR THIRD SAMPLE DEPOSIT
-        turnToHeading(330.0);
-        driveStraight(DRIVE_SPEED, 45, 330.0);
+        driveRight(DRIVE_SPEED,70,0);
+        driveStraight(DRIVE_SPEED,25, 0);
+        turnToHeading( TURN_SPEED,   90.0);
+        holdHeading( TURN_SPEED,   90.0, 0.5);
+        driveStraight(DRIVE_SPEED,48, 90);
+        driveLeft(DRIVE_SPEED,25,90);
+        turnToHeading( TURN_SPEED,   0);
+        holdHeading( TURN_SPEED,   0, 0.5);
+        driveLeft(DRIVE_SPEED,25,0);
 
 
-        // $$ END AUTONOMOUS MODE
+        //  robot.stopResetEncode();
+        // strafeRight(24, telemetry, this);
 
+     /*   robot.tilt.setTargetPosition(6980);
+        robot.tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.tilt.setPower(.8);
+        while( robot.tilt.isBusy()) {
 
+        }
+        robot.tilt.setPower(0);
+
+        robot.twistClaw.setPosition(0.30);
+        robot.claw.setPosition(0);
+        sleep(1000);  // Pause to display last telemetry message.
+
+        robot.tilt.setTargetPosition(0);
+        robot.tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.tilt.setPower(.8);
+        while( robot.tilt.isBusy()) {
+
+        }  */
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // Pause to display last telemetry message.
@@ -230,16 +232,6 @@ public class GyroMoving extends LinearOpMode {
      */
 
     // **********  HIGH Level driving functions.  ********************
-
-
-    /**
-     *
-     */
-
-    public void turnToHeading(double angle){
-        turnToHeading(TURN_SPEED, angle);
-        holdHeading(TURN_SPEED, angle,0.5);
-    }
 
     /**
      *  Drive in a straight line, on a fixed compass heading (angle), based on encoder counts.

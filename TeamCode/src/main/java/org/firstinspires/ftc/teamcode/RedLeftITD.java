@@ -89,9 +89,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Gyro Moving", group="Robot")
+@Autonomous(name="Red Left ITD Auto", group="Robot")
 //@Disabled
-public class GyroMoving extends LinearOpMode {
+public class RedLeftITD extends LinearOpMode {
     HardwareMecanum robot = new HardwareMecanum();
     /* Declare OpMode members. */
     //  private DcMotor         leftDrive   = null;
@@ -190,36 +190,37 @@ public class GyroMoving extends LinearOpMode {
 
         // $$ START AUTONOMOUS MODE
 
-
-        driveStraight(DRIVE_SPEED, 15, 0);
-        driveLeft(DRIVE_SPEED,15, 0 );
-        driveStraight(DRIVE_SPEED, 8, 0);
+        driveStraight(DRIVE_SPEED, 18, 0);
+        driveLeft(DRIVE_SPEED,33, 0 );
+        driveStraight(DRIVE_SPEED, 10, 0);
         // INSERT CLAW MOVE FOR FIRST SAMPLE
-        driveStraight(DRIVE_SPEED, -8, 0 );
+        driveStraight(DRIVE_SPEED, -10, 0 );
         turnToHeading(135.0);
         driveStraight(DRIVE_SPEED,4, 135.0 );
         // INSERT CLAW MOVE FOR FIRST SAMPLE DEPOSIT
         turnToHeading(360.0);
         driveStraight(DRIVE_SPEED, 10, 0 );
-        driveLeft( DRIVE_SPEED, 8, 0 );
+        driveLeft( DRIVE_SPEED, 5, 0 );
         // INSERT CLAW MOVE FOR SECOND SAMPLE
-        turnToHeading(165.0);
-        driveStraight(DRIVE_SPEED, 7, 0 );
+        driveStraight( DRIVE_SPEED, 3,0);
+        turnToHeading(170.0);
+        driveStraight(DRIVE_SPEED, 7, 180.0 );
         // INSERT CLAW MOVE FOR SECOND SAMPLE DEPOSIT
-        turnToHeading(27.0);
-        // INSERT CLAW MOVE FOR THIRD SAMPLE
-        turnToHeading(155.0);
-        // INSERT CLAW MOVE FOR THIRD SAMPLE DEPOSIT
-        turnToHeading(330.0);
-        driveStraight(DRIVE_SPEED, 45, 330.0);
+        driveStraight(DRIVE_SPEED, 6, 180.0);
+        driveStraight( DRIVE_SPEED,-4,180.0);
+        driveLeft(DRIVE_SPEED,5,180.0);
+        turnToHeading( 360.0);
+        driveLeft( DRIVE_SPEED, 4,180.0);
+        //INSERT CLAW TO GRAB THIRD SAMPLE
+        // $$ END AUTONOMOUS MODE
 
 
         // $$ END AUTONOMOUS MODE
 
 
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);  // Pause to display last telemetry message.
+       // telemetry.addData("Path", "Complete");
+      //  telemetry.update();
+       // sleep(1000);  // Pause to display last telemetry message.
     }
 
     /*
@@ -264,7 +265,7 @@ public class GyroMoving extends LinearOpMode {
             int moveCounts = (int)(distance * COUNTS_PER_INCH);
             robot.stopResetEncode();
 
-            leftTarget = robot.frontLeftDrive.getCurrentPosition() + moveCounts;
+              leftTarget = robot.frontLeftDrive.getCurrentPosition() + moveCounts;
             rightTarget = robot.frontRightDrive.getCurrentPosition() + moveCounts;
             leftTarget = robot.backLeftDrive.getCurrentPosition() + moveCounts;
             rightTarget = robot.backRightDrive.getCurrentPosition() + moveCounts;
@@ -319,10 +320,10 @@ public class GyroMoving extends LinearOpMode {
 
             // Determine new target position, and pass to motor controller
             int moveCounts = (int)(distance * COUNTS_PER_INCH*1.2);
-       /*     leftTarget = robot.frontLeftDrive.getCurrentPosition() + moveCounts;
+            leftTarget = robot.frontLeftDrive.getCurrentPosition() + moveCounts;
             rightTarget = robot.frontRightDrive.getCurrentPosition() + moveCounts;
             leftTarget = robot.backLeftDrive.getCurrentPosition() + moveCounts;
-            rightTa8rget = robot.backRightDrive.getCurrentPosition() + moveCounts; */
+            rightTarget = robot.backRightDrive.getCurrentPosition() + moveCounts;
             robot.stopResetEncode();
 
             // Set Target FIRST, then turn on RUN_TO_POSITION
@@ -486,8 +487,8 @@ public class GyroMoving extends LinearOpMode {
     }
 
 
-    /**
-     *  Spin on the central axis to point in a new direction.
+
+     /*  Spin on the central axis to point in a new direction.
      *  <p>
      *  Move will stop if either of these conditions occur:
      *  <p>
@@ -499,7 +500,7 @@ public class GyroMoving extends LinearOpMode {
      * @param heading Absolute Heading Angle (in Degrees) relative to last gyro reset.
      *              0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
      *              If a relative angle is required, add/subtract from current heading.
-     */
+*/
     public void turnToHeading(double maxTurnSpeed, double heading) {
 
         // Run getSteeringCorrection() once to pre-calculate the current error
@@ -529,8 +530,8 @@ public class GyroMoving extends LinearOpMode {
         moveRobot(0, 0);
     }
 
-    /**
-     *  Obtain & hold a heading for a finite amount of time
+
+     /*  Obtain & hold a heading for a finite amount of time
      *  <p>
      *  Move will stop once the requested time has elapsed
      *  <p>
@@ -621,7 +622,7 @@ public class GyroMoving extends LinearOpMode {
      *
      * @param straight  Set to true if we are driving straight, and the encoder positions should be included in the telemetry.
      */
-    private void sendTelemetry(boolean straight) {
+   private void sendTelemetry(boolean straight) {
 
         if (straight) {
             telemetry.addData("Motion", "Drive Straight");
@@ -638,9 +639,9 @@ public class GyroMoving extends LinearOpMode {
         telemetry.update();
     }
 
-    /**
-     * read the Robot heading directly from the IMU (in degrees)
-     */
+
+     // read the Robot heading directly from the IMU (in degrees)
+
     public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);

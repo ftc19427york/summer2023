@@ -155,15 +155,17 @@ public class Red_2024 extends LinearOpMode {
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
         // Step 1:  Drive forward for 3 seconds
-        robot.frontRightDrive.setPower(-.25);
-        robot.backRightDrive.setPower(.25);
-        robot.frontLeftDrive.setPower(.25);
-        robot.backLeftDrive.setPower(-.25);
 
         robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.backLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.backRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.frontRightDrive.setPower(-.25);
+        robot.backRightDrive.setPower(.25);
+        robot.frontLeftDrive.setPower(.25);
+        robot.backLeftDrive.setPower(-.25);
+
 
         while (robot.frontLeftDrive.isBusy() || robot.backRightDrive.isBusy()) {
             telemetry.addData("Path", "Driving 18 inches");

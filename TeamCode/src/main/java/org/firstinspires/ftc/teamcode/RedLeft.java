@@ -123,7 +123,7 @@ public class RedLeft extends OpMode
             driveSpinRight(.25,480, telemetry);//535
             armTilt(13);
             robot.twistClaw.setPosition(0.30);
-            robot.claw.setPosition(0);
+            robot.claw.setPosition(0);   // Zero opens the claw. It initializes to 0.10 to close and hold pixel in place
         }else if (x> 135 && x< 385) {
             driveStraight(23, telemetry, this);
              armTilt(13);
@@ -168,9 +168,9 @@ public class RedLeft extends OpMode
 
         }
             robot.tilt.setPower(0);
-        robot.tilt.setTargetPosition(0);
-        robot.tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.tilt.setPower(.8);
+            robot.tilt.setTargetPosition(0);
+            robot.tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.tilt.setPower(.8);
 
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
@@ -222,7 +222,7 @@ public class RedLeft extends OpMode
 
 
     public void driveSpinLeft(double power, int spinTicks, Telemetry telemetry){
-        robot.frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //Reset encoders has to be first
         robot.frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.backLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.backRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -287,9 +287,7 @@ public class AutoDriveByGyro_Linear extends LinearOpMode {
             }
 
             // Stop all motion & Turn off RUN_TO_POSITION
-            moveRobot(0, 0);
-            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            driveStraight(20, 52, 0);
         }
     }
 

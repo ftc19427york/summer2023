@@ -89,9 +89,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Gyro Moving", group="Robot")
+@Autonomous(name="Blue Left ITD Auto", group="Robot")
 //@Disabled
-public class GyroMoving extends LinearOpMode {
+public class BlueLeftITD extends LinearOpMode {
     HardwareMecanum robot = new HardwareMecanum();
     /* Declare OpMode members. */
     //  private DcMotor         leftDrive   = null;

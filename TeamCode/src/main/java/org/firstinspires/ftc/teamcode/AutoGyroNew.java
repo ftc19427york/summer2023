@@ -169,7 +169,7 @@ public class AutoGyroNew extends LinearOpMode {
         robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-        // Step through each leg of the path,
+        // Step through each leg of the path
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review

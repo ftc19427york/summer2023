@@ -37,13 +37,6 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.tfod.TfodProcessor;
-
-import java.util.List;
 
 
 @Autonomous(name="Basic: Iterative OpMode", group="Iterative OpMode")
@@ -70,14 +63,14 @@ public class RedLeft extends OpMode
     /**
      * The variable to store our instance of the TensorFlow Object Detection processor.
      */
-    private TfodProcessor tfod;
+ //   private TfodProcessor tfod;
 
     // static final double     DRIVE_SPEED             = 0.4;     // Max driving speed for better distance accuracy.
 
     /**
      * The variable to store our instance of the vision portal.
      */
-    private VisionPortal visionPortal;
+  //  private VisionPortal visionPortal;
     private IMU             imu         = null;
 
     /*
@@ -100,7 +93,7 @@ public class RedLeft extends OpMode
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
         robot.driveWithEncode();
-        initTfod();
+     //   initTfod();
     }
 
     /*
@@ -108,7 +101,7 @@ public class RedLeft extends OpMode
      */
     @Override
     public void init_loop() {
-        x = telemetryTfod();
+    //    x = telemetryTfod();
         telemetry.update();
     }
 
@@ -321,7 +314,7 @@ public class RedLeft extends OpMode
         }
         robot.stopDriving();
     }
-    private void initTfod() {
+   /* private void initTfod() {
 
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
@@ -385,7 +378,7 @@ public class RedLeft extends OpMode
     /**
      * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
-    public double telemetryTfod() {
+ /*   public double telemetryTfod() {
         //double x=0;
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
@@ -400,7 +393,7 @@ public class RedLeft extends OpMode
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
-        return x;
+        return x; */
     }   // end method telemetryTfod()
 
-}
+

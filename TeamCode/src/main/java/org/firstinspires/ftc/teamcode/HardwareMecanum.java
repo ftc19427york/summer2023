@@ -72,9 +72,9 @@ public class HardwareMecanum
  //   public RevColorSensorV3 frontColor = null;
 
     public final static double droneARM_HOME = 0.5; // Starting point for Servo Arm
-    public final static double clawARM_HOME = 0.0; // Starting point for Servo Arm
+    public final static double clawARM_HOME = 0.15; // Starting point for Servo Arm
 
-    public final static double twistClawARM_HOME = 0.0; // Starting point for Servo Arm
+    public final static double twistClawARM_HOME = 0.6; // Starting point for Servo Arm
 
     public final static double droneARM_MIN_RANGE = 0.0;  //Smallest number value allowed for servo position
     public final static double droneARM_MAX_RANGE = 1.0;  //Largest number allowed for servo position
